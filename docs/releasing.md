@@ -6,8 +6,8 @@ your approval in the `pypi` environment.
 
 ## One-time setup
 
-- [ ] Decide the repository name and replace `OWNER` (if present) and `COPYRIGHT_HOLDER` everywhere (`LICENSE`, `pyproject.toml`, `CITATION.cff`, `README.md`).
-- [ ] In `README.md`, replace relative links (such as `docs/principles.md`) with absolute GitHub URLs (`https://github.com/<owner>/<repo>/blob/main/...`). PyPI does not resolve relative links.
+- [ ] Decide the repository name and check that the owner and copyright holder are right everywhere (`LICENSE`, `pyproject.toml`, `CITATION.cff`, `README.md`).
+- [x] README links are already absolute GitHub URLs (PyPI does not resolve relative links).
 - [ ] Create the GitHub repository and push. CI must be green. The repository must be public so the README images show on PyPI.
 - [ ] Create accounts on pypi.org and test.pypi.org (they are separate) and enable two-factor authentication on both.
 - [ ] Set up Trusted Publishing without a token. On PyPI: *Account → Publishing → Add a new pending publisher* with project name `complexmd`, your owner, the repository name, workflow `release.yml` and environment `pypi`. Repeat on TestPyPI with environment `testpypi`. A pending publisher creates the project on the first upload.

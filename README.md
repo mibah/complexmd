@@ -51,7 +51,7 @@ as files that the researcher can open and repeat.
 Following the paper, COMPLEX.md also lists the model's canonical workflows, its domain
 conventions, reporting conventions and worked examples. It adds what an agent needs before it
 starts: purpose and scales, limits, when to stop and ask, when leaving the interface is
-acceptable, and how the contract improves. [docs/principles.md](docs/principles.md) marks
+acceptable, and how the contract improves. [docs/principles.md](https://github.com/mibah/complexmd/blob/main/docs/principles.md) marks
 which parts come from the paper and which are additions of this project.
 
 ## Quick start
@@ -63,7 +63,7 @@ complexmd init --system "My simulator" --command mysim
 complexmd check
 ```
 
-No installation needed? Copy [the template](src/complexmd/templates/full.md) into your
+No installation needed? Copy [the template](https://github.com/mibah/complexmd/blob/main/src/complexmd/templates/full.md) into your
 repository as `COMPLEX.md` and fill it in.
 
 ## Make agents read it
@@ -75,7 +75,7 @@ Agents only read what they are pointed to. For Claude Code, add this line to `CL
 ```
 
 For other agents, add a sentence to `AGENTS.md` that asks them to read COMPLEX.md before
-operating the model. Details: [docs/agent-integration.md](docs/agent-integration.md).
+operating the model. Details: [docs/agent-integration.md](https://github.com/mibah/complexmd/blob/main/docs/agent-integration.md).
 
 ## A contract that improves with use
 
@@ -83,7 +83,7 @@ A COMPLEX.md is never finished. Give an agent a realistic request and nothing bu
 and the interface; let a second agent review its logs and outputs; turn what went wrong into
 revisions, approved by a maintainer and recorded in the revision log. Repeated escalations
 show which features the interface still lacks. How to run such a round:
-[docs/living-contract.md](docs/living-contract.md).
+[docs/living-contract.md](https://github.com/mibah/complexmd/blob/main/docs/living-contract.md).
 
 ## A valid file is a commitment, not proof
 
@@ -94,8 +94,8 @@ Whether an agent can really work with it is shown only by a review round as desc
 
 | Example | Shows |
 | --- | --- |
-| [Epidemic model](examples/epidemic-model/COMPLEX.md) | a CLI layer around an existing compartmental library |
-| [Opinion dynamics](examples/opinion-dynamics/COMPLEX.md) | an agent-based model on networks, with seeds and ensembles |
+| [Epidemic model](https://github.com/mibah/complexmd/blob/main/examples/epidemic-model/COMPLEX.md) | a CLI layer around an existing compartmental library |
+| [Opinion dynamics](https://github.com/mibah/complexmd/blob/main/examples/opinion-dynamics/COMPLEX.md) | an agent-based model on networks, with seeds and ensembles |
 
 Both systems are fictional.
 
@@ -114,9 +114,9 @@ If you use COMPLEX.md, please cite the paper that motivated it:
 > Cattuto, C. & Vespignani, A. Computational models of complex systems meet AI agents.
 > *npj Complexity* (2026). https://doi.org/10.1038/s44260-026-00102-1
 
-Citation metadata for this repository is in [CITATION.cff](CITATION.cff).
+Citation metadata for this repository is in [CITATION.cff](https://github.com/mibah/complexmd/blob/main/CITATION.cff).
 
 ## Contributing and license
 
 Contributions are welcome, especially reports from real models. See
-[CONTRIBUTING.md](CONTRIBUTING.md). Released under the [MIT License](LICENSE).
+[CONTRIBUTING.md](https://github.com/mibah/complexmd/blob/main/CONTRIBUTING.md). Released under the [MIT License](https://github.com/mibah/complexmd/blob/main/LICENSE).
