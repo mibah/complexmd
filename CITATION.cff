@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use COMPLEX.md, please cite it and the paper that motivated it."
+title: "COMPLEX.md: a Markdown agent contract for complex systems models"
+type: software
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/mibah/complexmd"
+authors:
+  - name: "COMPLEXmd contributors"
+references:
+  - type: article
+    title: "Computational models of complex systems meet AI agents"
+    authors:
+      - family-names: Cattuto
+        given-names: Ciro
+      - family-names: Vespignani
+        given-names: Alessandro
+    journal: "npj Complexity"
+    year: 2026
+    doi: "10.1038/s44260-026-00102-1"

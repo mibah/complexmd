@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "complexmd"
+version = "0.1.0"
+description = "A Markdown agent contract for simulators and libraries of complex systems."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "COMPLEXmd contributors" }]
+keywords = ["complex-systems", "simulation", "ai-agents", "markdown", "reproducibility"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/mibah/complexmd"
+Issues = "https://github.com/mibah/complexmd/issues"
+Paper = "https://doi.org/10.1038/s44260-026-00102-1"
+
+[project.scripts]
+complexmd = "complexmd.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.6", "build>=1", "twine>=6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/complexmd"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/src", "/tests", "/docs", "/examples", "/README.md", "/LICENSE", "/CHANGELOG.md", "/CITATION.cff", "/pyproject.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

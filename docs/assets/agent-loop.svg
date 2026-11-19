@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" role="img" aria-labelledby="t d">
+  <title id="t">The agent-in-the-loop workflow with COMPLEX.md</title>
+  <desc id="d">A researcher gives objectives to an agent. The agent, which reads COMPLEX.md, runs the model through its own commands. The model writes configurations, runs and manifests to files, which the agent queries. The researcher can inspect and replay the files directly, shown as a dashed line.</desc>
+  <style>
+    .box { fill: none; stroke: #4F46E5; stroke-width: 2.5; }
+    .title { font: 700 19px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #1E1B4B; }
+    .sub { font: 400 14px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #1E1B4B; }
+    .lbl { font: italic 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #475569; }
+    .foot { font: 400 13px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #475569; }
+    .arrow { stroke: #4F46E5; stroke-width: 2.5; fill: none; }
+    .dash { stroke: #94A3B8; stroke-width: 2.5; fill: none; stroke-dasharray: 7 6; }
+    .head { fill: #4F46E5; }
+    .headg { fill: #94A3B8; }
+    .doc { fill: #F2C14E; stroke: #1E1B4B; stroke-width: 2; }
+    .docline { stroke: #1E1B4B; stroke-width: 2; }
+    @media (prefers-color-scheme: dark) {
+      .title, .sub { fill: #E0E7FF; }
+      .lbl, .foot { fill: #CBD5E1; }
+      .box, .arrow { stroke: #A5B4FC; }
+      .head { fill: #A5B4FC; }
+    }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="head" d="M0 0 L10 5 L0 10 z"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="headg" d="M0 0 L10 5 L0 10 z"/></marker>
+  </defs>
+
+  <rect class="box" x="340" y="30" width="220" height="80" rx="12"/>
+  <text class="title" x="450" y="62" text-anchor="middle">Researcher</text>
+  <text class="sub" x="450" y="88" text-anchor="middle">goals, judgement</text>
+
+  <rect class="box" x="550" y="220" width="220" height="80" rx="12"/>
+  <text class="title" x="660" y="252" text-anchor="middle">Agent</text>
+  <text class="sub" x="660" y="278" text-anchor="middle">plans, runs, queries</text>
+
+  <rect class="box" x="340" y="400" width="220" height="80" rx="12"/>
+  <text class="title" x="450" y="432" text-anchor="middle">Model</text>
+  <text class="sub" x="450" y="458" text-anchor="middle">its own commands</text>
+
+  <rect class="box" x="130" y="220" width="220" height="80" rx="12"/>
+  <text class="title" x="240" y="252" text-anchor="middle">Files</text>
+  <text class="sub" x="240" y="278" text-anchor="middle">configs, runs, manifests</text>
+
+  <path class="doc" d="M805 225 h28 l14 14 v38 h-42 z"/>
+  <path class="docline" d="M833 225 v14 h14 M812 252 h28 M812 262 h28"/>
+  <text class="sub" x="826" y="304" text-anchor="middle">COMPLEX.md</text>
+
+  <path class="arrow" d="M560 70 Q660 70 660 218" marker-end="url(#a)"/>
+  <text class="lbl" x="668" y="130">objectives</text>
+  <path class="arrow" d="M660 302 Q660 440 562 440" marker-end="url(#a)"/>
+  <text class="lbl" x="668" y="395">commands</text>
+  <path class="arrow" d="M338 440 Q240 440 240 302" marker-end="url(#a)"/>
+  <text class="lbl" x="115" y="395">writes</text>
+  <path class="arrow" d="M352 260 L548 260" marker-end="url(#a)"/>
+  <text class="lbl" x="450" y="250" text-anchor="middle">queries</text>
+  <path class="dash" d="M338 70 Q240 70 240 218" marker-start="url(#g)" marker-end="url(#g)"/>
+  <text class="lbl" x="228" y="130" text-anchor="end">inspect &amp; replay</text>
+
+  <text class="foot" x="450" y="506" text-anchor="middle">Adapted from the agent-in-the-loop workflow in Cattuto &amp; Vespignani (2026).</text>
+</svg>
