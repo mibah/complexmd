@@ -61,7 +61,6 @@ complexmd check
 
 `init` only writes one file, `COMPLEX.md`, into your project; it does not touch your model.
 `check` reports missing sections and unfilled placeholders written as `[like this]`.
-Until the package is on PyPI, install it with `pip install git+https://github.com/mibah/complexmd`.
 
 You do not need the package. COMPLEX.md is plain Markdown and independent of your model's
 language (Python, R, Julia, NetLogo, ...). Copy [the template](https://github.com/mibah/complexmd/blob/main/src/complexmd/templates/template.md) into
