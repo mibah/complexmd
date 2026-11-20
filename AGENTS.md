@@ -6,5 +6,5 @@
 - The example must pass `complexmd check`. Keep it marked as fictional.
 - Describe the paper in your own words and cite it. Mark COMPLEXmd additions as such.
 - Never claim review results, readiness or adoption that did not happen.
-- Commands: `uv sync --locked`, `uv run --locked pytest`, `uv run --locked ruff check`, `uv build`.
+- Commands: see CONTRIBUTING.md (`python -m pytest`, `python -m ruff check`, `python -m build`; or the `uv` equivalents).
 - Do not push, tag or publish without explicit approval.
