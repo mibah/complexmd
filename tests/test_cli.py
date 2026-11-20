@@ -24,7 +24,7 @@ def test_init_default(tmp_path, capsys):
     target = tmp_path / "COMPLEX.md"
     assert code == 0
     assert out == (
-        f"Created {target} from the full template.\n"
+        f"Created {target} from the template.\n"
         "Next: describe your interface under Discover, Configure, Run and Results,\n"
         f"then run `complexmd check {target}`.\n"
     )
@@ -32,18 +32,11 @@ def test_init_default(tmp_path, capsys):
     assert "## Reporting" in target.read_text(encoding="utf-8")
 
 
-def test_init_minimal(tmp_path, capsys):
-    code, out, _ = run(capsys, "init", "--template", "minimal", "--path", str(tmp_path))
-    assert code == 0
-    assert "from the minimal template" in out
-    assert "## Reporting" not in (tmp_path / "COMPLEX.md").read_text(encoding="utf-8")
-
-
 def test_init_replaces_values_and_sets_date(tmp_path, capsys):
     run(capsys, "init", "--path", str(tmp_path), "--system", "Demo", "--command", "demo")
     text = (tmp_path / "COMPLEX.md").read_text(encoding="utf-8")
     assert "**System:** Demo" in text
-    assert "<cmd>" not in text and "`demo describe`" in text
+    assert "[cmd]" not in text and "`demo describe`" in text
     assert "claim that Demo is ready" in text
     assert f"#### {date.today().isoformat()} · 0.1.0 · First version" in text
     assert "YYYY-MM-DD" not in text
@@ -52,7 +45,7 @@ def test_init_replaces_values_and_sets_date(tmp_path, capsys):
 def test_init_json(tmp_path, capsys):
     code, out, _ = run(capsys, "init", "--path", str(tmp_path), "--json")
     assert code == 0
-    assert json.loads(out) == {"created": str(tmp_path / "COMPLEX.md"), "template": "full"}
+    assert json.loads(out) == {"created": str(tmp_path / "COMPLEX.md")}
 
 
 def test_init_does_not_overwrite_file(tmp_path, capsys):
@@ -106,30 +99,12 @@ def test_init_output_passes_check_without_errors(tmp_path, capsys):
     assert code == 0
 
 
-# --- templates -----------------------------------------------------------------------------------
-
-
-def test_templates_text(capsys):
-    code, out, _ = run(capsys, "templates")
-    assert code == 0
-    assert "full" in out and "all sections with guidance" in out
-    assert "minimal" in out and "required sections only" in out
-
-
-def test_templates_json(capsys):
-    code, out, _ = run(capsys, "templates", "--json")
-    assert code == 0
-    data = json.loads(out)
-    assert [d["name"] for d in data] == ["full", "minimal"]
-    assert all("description" in d for d in data)
-
-
 # --- check ---------------------------------------------------------------------------------------
 
 
 def test_check_file_text_output(tmp_path, capsys, valid_contract):
     f = tmp_path / "COMPLEX.md"
-    f.write_text(valid_contract + "\nTodo <here>\n", encoding="utf-8")
+    f.write_text(valid_contract + "\nTodo [here]\n", encoding="utf-8")
     code, out, _ = run(capsys, "check", str(f))
     lines = out.splitlines()
     assert code == 0
@@ -165,7 +140,7 @@ def test_check_directory_is_recursive(tmp_path, capsys, valid_contract):
 
 def test_check_strict(tmp_path, capsys, valid_contract):
     f = tmp_path / "COMPLEX.md"
-    f.write_text(valid_contract + "\nTodo <here>\n", encoding="utf-8")
+    f.write_text(valid_contract + "\nTodo [here]\n", encoding="utf-8")
     assert run(capsys, "check", str(f))[0] == 0
     code, out, _ = run(capsys, "check", "--strict", str(f))
     assert code == 1 and "failed" in out
@@ -225,8 +200,8 @@ def test_no_subcommand_shows_help(capsys):
 
 def test_python_dash_m():
     proc = subprocess.run(
-        [sys.executable, "-m", "complexmd", "templates", "--json"],
+        [sys.executable, "-m", "complexmd", "--version"],
         capture_output=True, text=True, check=False,
     )  # fmt: skip
     assert proc.returncode == 0
-    assert json.loads(proc.stdout)[0]["name"] == "full"
+    assert proc.stdout.startswith("complexmd ")

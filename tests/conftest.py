@@ -10,10 +10,10 @@ REPO = Path(__file__).resolve().parents[1]
 
 def make_valid_contract() -> str:
     """The full template with every placeholder filled in: a contract without findings."""
-    text = cli._render_template("full", "Demo model", "demo")
+    text = cli._render_template("Demo model", "demo")
     previous = None
     while previous != text:  # placeholders can be nested, so substitute until stable
-        previous, text = text, re.sub(r"<[^<>\n]*>", "text", text)
+        previous, text = text, re.sub(r"\[[^\[\]\n]*[A-Za-z\u2026][^\[\]\n]*\](?!\()", "text", text)
     return text
 
 

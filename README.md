@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mibah/complexmd/main/docs/assets/complexmd-banner.svg" width="100%" alt="The COMPLEX.md wordmark above a small network whose edges close into a loop.">
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/license-MIT-4f46e5.svg" alt="License: MIT">
   <img src="https://img.shields.io/badge/python-3.11%2B-4f46e5.svg" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/runtime%20dependencies-none-4f46e5.svg" alt="No runtime dependencies">
@@ -63,8 +59,13 @@ complexmd init --system "My simulator" --command mysim
 complexmd check
 ```
 
-No installation needed? Copy [the template](https://github.com/mibah/complexmd/blob/main/src/complexmd/templates/full.md) into your
-repository as `COMPLEX.md` and fill it in.
+`init` only writes one file, `COMPLEX.md`, into your project; it does not touch your model.
+`check` reports missing sections and unfilled placeholders written as `[like this]`.
+Until the package is on PyPI, install it with `pip install git+https://github.com/mibah/complexmd`.
+
+You do not need the package. COMPLEX.md is plain Markdown and independent of your model's
+language (Python, R, Julia, NetLogo, ...). Copy [the template](https://github.com/mibah/complexmd/blob/main/src/complexmd/templates/template.md) into
+your repository as `COMPLEX.md` and fill it in.
 
 ## Make agents read it
 
@@ -74,8 +75,17 @@ Agents only read what they are pointed to. For Claude Code, add this line to `CL
 @COMPLEX.md
 ```
 
-For other agents, add a sentence to `AGENTS.md` that asks them to read COMPLEX.md before
-operating the model. Details: [docs/agent-integration.md](https://github.com/mibah/complexmd/blob/main/docs/agent-integration.md).
+For other agents, add this to `AGENTS.md`:
+
+```markdown
+This project ships an agent contract in `COMPLEX.md`. Read it completely before you operate
+the model, use the commands it documents, and follow its rules for escalation and human
+checkpoints.
+```
+
+The paper calls the contract `AGENT.md`. If a tool expects that name, add an `AGENT.md` whose
+only line points to `COMPLEX.md`. A file cannot force an agent to follow it; what counts is the
+review round described below.
 
 ## A contract that improves with use
 
@@ -88,6 +98,11 @@ show which features the interface still lacks. How to run such a round:
 ## A valid file is a commitment, not proof
 
 `complexmd check` verifies that a contract has the expected structure. It does not run the model.
+It reports an error if a required section, one of the three header lines (`System`,
+`Contract version`, `Last reviewed`), a row for each of the six principles in the Conformance
+table, or a revision-log entry is missing or malformed. It warns about missing recommended
+sections, unfilled `[placeholders]` and very long files. The rules are listed in
+[`checker.py`](https://github.com/mibah/complexmd/blob/main/src/complexmd/checker.py).
 Whether an agent can really work with it is shown only by a review round as described above.
 
 ## Examples
@@ -95,9 +110,8 @@ Whether an agent can really work with it is shown only by a review round as desc
 | Example | Shows |
 | --- | --- |
 | [Epidemic model](https://github.com/mibah/complexmd/blob/main/examples/epidemic-model/COMPLEX.md) | a CLI layer around an existing compartmental library |
-| [Opinion dynamics](https://github.com/mibah/complexmd/blob/main/examples/opinion-dynamics/COMPLEX.md) | an agent-based model on networks, with seeds and ensembles |
 
-Both systems are fictional.
+The system is fictional; its commands do not exist.
 
 ## Roadmap
 

@@ -1,4 +1,4 @@
-"""Structural checks for COMPLEX.md files (rules CX001 to CX060, see docs/specification.md)."""
+"""Structural checks for COMPLEX.md files (rules CX001 to CX060)."""
 
 from __future__ import annotations
 
@@ -43,13 +43,9 @@ _FENCE = re.compile(r"^\s{0,3}(```|~~~)")
 _SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
 _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _ENTRY = re.compile(r"^(\d{4}-\d{2}-\d{2}) · (\d+\.\d+\.\d+) · \S.*$")
-_PLACEHOLDER = re.compile(r"<[^<>\n]*>")
-_HTML_TAG = re.compile(r"^</?([a-zA-Z][a-zA-Z0-9]*)(\s[^<>]*)?/?>$")
-_HTML_NAMES = {
-    "a", "b", "br", "code", "details", "div", "em", "h1", "h2", "h3", "h4", "h5", "h6", "hr",
-    "i", "img", "kbd", "li", "ol", "p", "pre", "span", "strong", "sub", "summary", "sup",
-    "table", "tbody", "td", "th", "thead", "tr", "ul",
-}  # fmt: skip
+# A placeholder is square brackets around text with a letter or an ellipsis, e.g. [name] or [...].
+# Links ([text](url)), empty brackets (errors[]) and number ranges ([0, 1]) do not count.
+_PLACEHOLDER = re.compile(r"\[[^\[\]\n]*[A-Za-z\u2026][^\[\]\n]*\](?!\()")
 
 
 @dataclass
@@ -137,10 +133,7 @@ def _header_value(lines, in_code, label):
 
 
 def _is_placeholder(token: str) -> bool:
-    if "://" in token:
-        return False
-    m = _HTML_TAG.match(token)
-    return not (m and m.group(1).lower() in _HTML_NAMES)
+    return token[1:-1].strip().lower() != "x"  # [x] is a checked task box, not a placeholder
 
 
 def check_text(text: str, path: str = "<text>", max_words: int = DEFAULT_MAX_WORDS) -> Report:
@@ -256,7 +249,8 @@ def _check_conformance(lines, in_code, headings, report):
         key = _norm_principle(name)
         principle = _PRINCIPLE_BY_NORM.get(key)
         if principle is None:
-            report.errors.append(Issue("CX031", i + 1, f'unknown principle "{name}" in table'))
+            msg = f'row "{name}" is not one of the six principles'
+            report.warnings.append(Issue("CX031", i + 1, msg))
             continue
         if principle in seen:
             report.errors.append(Issue("CX031", i + 1, f'principle "{principle}" appears twice'))

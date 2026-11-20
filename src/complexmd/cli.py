@@ -1,4 +1,4 @@
-"""Command line interface: `complexmd init | templates | check`."""
+"""Command line interface: `complexmd init | check`."""
 
 from __future__ import annotations
 
@@ -12,10 +12,6 @@ from pathlib import Path
 
 from complexmd import checker
 
-TEMPLATES = {
-    "full": "all sections with guidance",
-    "minimal": "required sections only",
-}
 FILENAME = "COMPLEX.md"
 FOOTER = "Checked structure only. This does not test whether the interface works."
 
@@ -43,12 +39,12 @@ def _plural(n: int, word: str) -> str:
     return f"{n} {word}" if n == 1 else f"{n} {word}s"
 
 
-def _render_template(name: str, system: str | None, command: str | None) -> str:
-    text = (resources.files("complexmd") / "templates" / f"{name}.md").read_text(encoding="utf-8")
+def _render_template(system: str | None, command: str | None) -> str:
+    text = (resources.files("complexmd") / "templates" / "template.md").read_text(encoding="utf-8")
     if system:
-        text = text.replace("<name of the simulator or library>", system).replace("<system>", system)
+        text = text.replace("[name of the simulator or library]", system).replace("[system]", system)
     if command:
-        text = text.replace("<cmd>", command)
+        text = text.replace("[cmd]", command)
     return text.replace("#### YYYY-MM-DD", f"#### {datetime.date.today().isoformat()}", 1)
 
 
@@ -66,7 +62,7 @@ def cmd_init(args: argparse.Namespace) -> int:
     else:
         _err(exists_msg)
         return 2
-    text = _render_template(args.template, args.system, args.command)
+    text = _render_template(args.system, args.command)
     try:
         with open(target, "x", encoding="utf-8", newline="\n") as fh:
             fh.write(text)
@@ -77,19 +73,11 @@ def cmd_init(args: argparse.Namespace) -> int:
         _err(f"cannot write {target}: {exc.strerror or exc}")
         return 2
     if args.json:
-        print(json.dumps({"created": str(target), "template": args.template}))
+        print(json.dumps({"created": str(target)}))
     else:
-        print(f"Created {target} from the {args.template} template.")
+        print(f"Created {target} from the template.")
         print("Next: describe your interface under Discover, Configure, Run and Results,")
         print(f"then run `complexmd check {target}`.")
-    return 0
-
-
-def cmd_templates(args: argparse.Namespace) -> int:
-    if args.json:
-        print(json.dumps([{"name": n, "description": d} for n, d in TEMPLATES.items()]))
-    else:
-        print("\n".join(f"{key:<8}{text}" for key, text in TEMPLATES.items()))
     return 0
 
 
@@ -136,16 +124,11 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command")
 
     p_init = sub.add_parser("init", help=f"create a {FILENAME} from a template")
-    p_init.add_argument("--template", choices=list(TEMPLATES), default="full")
     p_init.add_argument("--path", default=".", help="existing directory (default: .)")
     p_init.add_argument("--system", help="name of your simulator or library")
     p_init.add_argument("--command", help="the command line tool that drives your model")
     p_init.add_argument("--json", action="store_true", help="machine-readable output")
     p_init.set_defaults(func=cmd_init)
-
-    p_tpl = sub.add_parser("templates", help="list the available templates")
-    p_tpl.add_argument("--json", action="store_true", help="machine-readable output")
-    p_tpl.set_defaults(func=cmd_templates)
 
     p_chk = sub.add_parser("check", help=f"check the structure of {FILENAME} files")
     p_chk.add_argument("paths", nargs="*", default=None, metavar="PATH")

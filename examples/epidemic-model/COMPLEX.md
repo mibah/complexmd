@@ -3,7 +3,9 @@
 > Illustrative example. The system described here is fictional; its commands do not exist.
 
 **System:** EpiSim CLI (wrapping the fictional episim library 2.3)
+
 **Contract version:** 0.2.0
+
 **Last reviewed:** 2026-10-12
 
 Read this file completely before running any command. People can use it as a manual for
@@ -63,25 +65,23 @@ and this file disagree, report it (see "Living contract").
 
 ## Same commands for people and agents
 
-`episim-cli replay runs/base` prints the commands that produced a run, from its `manifest.json`.
-A person can rerun them and compare the new `summary.json` with the old one.
+`episim-cli replay runs/base` prints the commands that produced a run (from `manifest.json`), so a person can rerun them and compare `summary.json`.
 
 ## Compose
 
-- The fictional `netsim` tool can read `trajectories.parquet` as a seeding profile; `manifest.json` lists `parents`.
-- Compare models only on observables with the same definition and unit.
+- The fictional `netsim` tool can read `trajectories.parquet` as a seeding profile; `manifest.json` lists `parents`. Compare models only on observables with the same definition and unit.
 
 ## Interventions
 
-- `school_closure` (group `0-17`, `start_day`, `duration_days`) and `contact_reduction`: `intensity` is the share of contacts **removed** (0 to 1); 0.3 removes 30%.
-- `vaccination` (`coverage` per age group, `start_day`, `efficacy`).
-- Apply one intervention at a time first, then combinations. Always compare with a baseline that has the same seed and horizon.
+- `school_closure`: group `0-17`, `start_day`, `duration_days`.
+- `contact_reduction`: `intensity` is the share of contacts **removed** (0 to 1); 0.3 removes 30%.
+- `vaccination`: `coverage` per age group, `start_day`, `efficacy`. Apply one intervention at a time first, then combinations; always compare with a baseline that has the same seed and horizon.
 
 ## Conventions and limits
 
 - **Conventions and units:** time in days; rates per day; prevalence as a fraction of the age group.
 - **Valid for:** populations above 10,000 people, horizons up to 3 years. **Fails for:** small outbreaks, clustered contacts, changing behavior.
-- **Uncertainty:** stochastic (replicates), parametric (`beta`, contact matrix); numerical `unknown`.
+- **Uncertainty:** stochastic (replicates), parametric (`beta`, contact matrix); numerical: `unknown`.
 
 ## Reporting
 

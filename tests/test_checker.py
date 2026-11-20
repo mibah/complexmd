@@ -160,11 +160,12 @@ def test_cx031_missing_principle(valid_contract):
     assert "Statelessness" in report.errors[0].message
 
 
-def test_cx031_unknown_row(valid_contract):
-    text = replace_once(
-        valid_contract, "| Composability | planned | |\n", "| Composability | planned | |\n| Magic | planned | |\n"
-    )
-    assert "CX031" in codes(check_text(text).errors)
+def test_cx031_extra_row_is_only_a_warning(valid_contract):
+    row = "| Composability | planned | |\n"
+    text = replace_once(valid_contract, row, row + "| Reproducibility | planned | |\n")
+    report = check_text(text)
+    assert report.ok
+    assert "CX031" in codes(report.warnings)
 
 
 def test_cx031_duplicate_row(valid_contract):
@@ -260,7 +261,7 @@ def test_cx042_uses_newest_entry(valid_contract):
 
 
 def test_cx050_placeholders_are_summarised(valid_contract):
-    text = valid_contract + "\nSee <first> and <second>.\n"
+    text = valid_contract + "\nSee [first] and [second].\n"
     report = check_text(text)
     hits = [w for w in report.warnings if w.code == "CX050"]
     assert len(hits) == 1
@@ -273,18 +274,22 @@ def test_cx050_counts_date_placeholder(valid_contract):
     assert "CX050" in codes(check_text(text).warnings)
 
 
-def test_cx050_ignores_html_and_code_blocks(valid_contract):
+def test_cx050_ignores_links_ranges_checkboxes_and_code_blocks(valid_contract):
     text = valid_contract + (
-        '\n<br>\n<img src="x.svg" alt="y">\n<p align="center">\n</p>\n<https://example.org>\n'
-        "\n```\n<in code> YYYY-MM-DD\n```\n"
+        "\n[a link](https://example.org), `errors[]`, opinions in [0, 1], [x] done.\n"
+        "\n```\n[in code] YYYY-MM-DD\n```\n"
     )
     assert "CX050" not in all_codes(check_text(text))
 
 
-def test_cx050_in_templates():
+def test_cx050_html_like_text_is_not_a_placeholder(valid_contract):
+    assert "CX050" not in all_codes(check_text(valid_contract + "\n<br>\n<cmd>\n"))
+
+
+def test_cx050_in_template():
     from complexmd import cli
 
-    raw = cli._render_template("full", None, None)
+    raw = cli._render_template(None, None)
     assert "CX050" in codes(check_text(raw).warnings)
 
 
@@ -298,27 +303,39 @@ def test_cx060_word_limit(valid_contract):
 # --- Templates, examples, paths --------------------------------------------------------------------
 
 
-@pytest.mark.parametrize("name", ["full", "minimal"])
-def test_templates_have_no_errors(name):
+def test_template_has_no_errors():
     from complexmd import cli
 
-    report = check_text(cli._render_template(name, None, None))
-    assert report.errors == []
+    assert check_text(cli._render_template(None, None)).errors == []
 
 
-def test_minimal_contains_exactly_the_required_sections():
+def test_template_renders_safely_in_markdown():
     from complexmd import cli
 
-    text = cli._render_template("minimal", None, None)
+    text = cli._render_template(None, None)
+    assert "<" not in text.replace("<br>", "")  # angle brackets would be read as HTML and hidden
+    lines = text.splitlines()
+    for label in ("**System:**", "**Contract version:**", "**Last reviewed:**"):
+        i = next(k for k, line in enumerate(lines) if line.startswith(label))
+        assert lines[i + 1] == ""  # blank line, so each header line stays its own paragraph
+
+
+def test_template_contains_every_section():
+    from complexmd import cli
+
+    text = cli._render_template(None, None)
     h2 = [m.group(1).strip() for m in re.finditer(r"^## (.+)$", text, flags=re.MULTILINE)]
-    assert h2 == checker.REQUIRED_SECTIONS
+    for name in checker.REQUIRED_SECTIONS + checker.RECOMMENDED_SECTIONS:
+        assert name in h2
 
 
-@pytest.mark.parametrize("example", ["epidemic-model", "opinion-dynamics"])
-def test_examples_have_no_errors(repo_root, example):
-    report = check_file(repo_root / "examples" / example / "COMPLEX.md")
-    assert report.errors == []
-    assert 80 <= len((repo_root / "examples" / example / "COMPLEX.md").read_text().splitlines()) <= 140
+def test_example_has_no_findings_and_is_marked_fictional(repo_root):
+    f = repo_root / "examples" / "epidemic-model" / "COMPLEX.md"
+    report = check_file(f)
+    assert report.errors == [] and report.warnings == []
+    lines = f.read_text(encoding="utf-8").splitlines()
+    assert 80 <= len(lines) <= 140
+    assert lines[2].startswith("> Illustrative example. The system described here is fictional")
 
 
 def test_check_path_walks_directories(tmp_path, valid_contract):

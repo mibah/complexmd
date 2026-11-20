@@ -15,8 +15,7 @@ def test_wheel_installs_and_works(tmp_path, repo_root):
     wheel = next(dist.glob("complexmd-*.whl"))
 
     names = zipfile.ZipFile(wheel).namelist()
-    assert "complexmd/templates/full.md" in names
-    assert "complexmd/templates/minimal.md" in names
+    assert "complexmd/templates/template.md" in names
 
     env = tmp_path / "venv"
     venv.EnvBuilder(with_pip=True).create(env)

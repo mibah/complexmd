@@ -27,8 +27,15 @@ uv build
 ## Pull requests
 
 - Keep them small and say which checks you ran.
-- If you touch the convention, update the template, `checker.py`, `docs/specification.md`, the tests and `CHANGELOG.md` together.
+- If you touch the convention, update the template, `checker.py`, the tests and `CHANGELOG.md` together.
 - Mark invented examples as fictional. Do not add review results or adoption claims that did not happen.
 - Describe the paper in your own words and cite it; mark anything COMPLEXmd adds.
+
+## Releasing (maintainers)
+
+1. Set the version in `pyproject.toml` and `CITATION.cff`, date the entry in `CHANGELOG.md`, and run the development commands above.
+2. `uv build`, then `uvx twine check dist/*`, then install the wheel into a fresh environment and run `complexmd --version`.
+3. Upload to TestPyPI first (`uvx twine upload --repository testpypi dist/*`), then to PyPI (`uvx twine upload dist/*`), each with an API token from a PyPI account that has two-factor authentication.
+4. A version number can be uploaded only once; fix mistakes with a new version.
 
 By contributing you agree that your work is released under the [MIT License](LICENSE).
